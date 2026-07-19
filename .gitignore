@@ -77,12 +77,8 @@ coverage.xml
 *.sqlite3
 
 # 向量数据库和MD5记录
-rag-clothing-customer-service/chroma_db/
-rag-clothing-customer-service/md5.text
-zhisaotong_agent/src/zhisaotong_agent/chroma_db/
-zhisaotong_agent/src/zhisaotong_agent/chroma_db_dev/
-zhisaotong_agent/src/zhisaotong_agent/chroma_db_prod/
-zhisaotong_agent/src/zhisaotong_agent/md5.text
+**/chroma_db/
+md5.text
 
 # 聊天历史记录
 chat_history/
@@ -106,3 +102,11 @@ share/
 
 # 本项目本地环境/配置目录
 etc/
+
+# Claude Code
+.claude/
+
+# 密钥文件
+*.key
+*.pem
+*.secret
