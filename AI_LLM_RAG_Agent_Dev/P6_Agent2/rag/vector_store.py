@@ -21,11 +21,11 @@ class VectorStoreService:
         self.vector_store = Chroma(
             collection_name=chroma_conf["collection"]["name"],
             embedding_function=embeded_model,
-            persist_directory=chroma_conf["persist_directory"]
+            persist_directory=get_abs_path(chroma_conf["persist_directory"])
         )
         self.splitter = RecursiveCharacterTextSplitter(
             
-            chunk_size = chroma_conf["processing"]["chunk_size"],
+            chunk_size = chroma_conf["processing"]["chunk_size" ],
             chunk_overlap = chroma_conf["processing"]["chunk_overlap"],
             separators= chroma_conf["processing"]["separators"],
             length_function = len,
@@ -36,6 +36,9 @@ class VectorStoreService:
 
     def load_document(self):
 
+        """
+        calculate the md5 hash of the file, if the md5 hash is already in the md5_hex_store, skip the file, otherwise load the file into the vector store and save the md5 hash into the md5_hex_store
+        """
         def check_md5_hex(md5_for_check: str):
             if not os.path.exists(get_abs_path(chroma_conf["storage"]["md5_hex_store"])):
                 open(get_abs_path(chroma_conf["storage"]["md5_hex_store"]), "w", encoding="utf-8").close()
@@ -93,15 +96,15 @@ class VectorStoreService:
             except Exception as e:
                  logger.error(f"[load knowledge base]{path} content failed: {str(e)}", exec_info = True)
 
-# if __name__ == "__main__":
-#     # vs = VectorStoreService()
+if __name__ == "__main__":
+    vs = VectorStoreService()
 
-#     # vs.load_document()
+    vs.load_document()
 
-#     # retriever = vs.get_retriever()
+    retriever = vs.get_retriever()
 
-#     # res = retriever.invoke('lost')
+    res = retriever.invoke('lost')
 
-#     # for f in res:
-#     #     print(f.page_content)
-#     #     print("."*20)
+    for f in res:
+        print(f.page_content)
+        print("."*20)
